@@ -4,11 +4,11 @@ pipeline {
    agent any
   //agent { label 'executor-v2' }
 
-  options {
-    ansiColor('xterm')
-    timestamps()
-    buildDiscarder(logRotator(daysToKeepStr: '30'))
-  }
+//   options {
+//     ansiColor('xterm')
+//     timestamps()
+//     buildDiscarder(logRotator(daysToKeepStr: '30'))
+//   }
 
 //   triggers {
 //     cron(getDailyCronString())
