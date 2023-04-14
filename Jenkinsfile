@@ -1,7 +1,8 @@
 #!/usr/bin/env groovy
 
 pipeline {
-  agent { label 'executor-v2' }
+   agent any
+  //agent { label 'executor-v2' }
 
   options {
     ansiColor('xterm')
@@ -9,22 +10,21 @@ pipeline {
     buildDiscarder(logRotator(daysToKeepStr: '30'))
   }
 
-  triggers {
-    cron(getDailyCronString())
-  }
+//   triggers {
+//     cron(getDailyCronString())
+//   }
 
   stages {
-    stage('Test workflow') {
-      steps {
-        sh './test_workflow.sh'
+    stage("clone"){
+      steps{
+        echo "git clone"
       }
     }
-  }
-
-  post {
-    always {
-      script {
-        cleanupAndNotify(currentBuild.currentResult)
+    stage('conjur secret') {
+      steps {
+        withCredentials([conjurSecretCredential(credentialsId: 'host1apikey_password_fromjenkinsfile', variable: 'CONJUR_SECRET')]) {
+            sh 'echo $CONJUR_SECRET | base64'    
+        }
       }
     }
   }
